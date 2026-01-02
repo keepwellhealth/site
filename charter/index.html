@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Charter Book - Interactive Viewer</title>
+    <link rel='stylesheet' href='style.css'>
+</head>
+<body>
+    <div class="book-viewer">
+        <!-- Table of Contents Sidebar -->
+        <aside class="toc-sidebar" id="tocSidebar">
+            <div class="toc-header">
+                <h1>Charter Book</h1>
+                <p>An Interactive Reading Experience</p>
+            </div>
+            <nav>
+                <ul class="toc-list" id="tocList">
+                    <li><a href="#" data-chapter="md/chapter-01.html">Chapter 1: The Failure of Incentives</a></li>
+                    <li><a href="#" data-chapter="md/chapter-02.html">Chapter 2: The Myth of Greed</a></li>
+                    <li><a href="#" data-chapter="md/chapter-03.html">Chapter 3: Why Language Matters</a></li>
+                    <li><a href="#" data-chapter="md/chapter-04.html">Chapter 4: Health Is Stewardship, Not Transaction</a></li>
+                    <li><a href="#" data-chapter="md/chapter-05.html">Chapter 5: Fiduciary Responsibility in Healthcare</a></li>
+                    <li><a href="#" data-chapter="md/chapter-06.html">Chapter 6: Simplicity Is a Moral Choice</a></li>
+                    <li><a href="#" data-chapter="md/chapter-07.html">Chapter 7: Who Mother Keepwell Is (and Is Not)</a></li>
+                    <li><a href="#" data-chapter="md/chapter-08.html">Chapter 8: The Role of Symbol in Durable Institutions</a></li>
+                    <li><a href="#" data-chapter="md/chapter-09.html">Chapter 9: Membership, Not Insurance</a></li>
+                    <li><a href="#" data-chapter="md/chapter-10.html">Chapter 10: Direct Care and Care Coordination</a></li>
+                    <li><a href="#" data-chapter="md/chapter-11.html">Chapter 11: Bringing Care to Work</a></li>
+                    <li><a href="#" data-chapter="md/chapter-12.html">Chapter 12: Federated Structure</a></li>
+                    <li><a href="#" data-chapter="md/chapter-13.html">Chapter 13: The Chartering Authority</a></li>
+                    <li><a href="#" data-chapter="md/chapter-14.html">Chapter 14: Outcome-Linked Leadership Compensation</a></li>
+                    <li><a href="#" data-chapter="md/chapter-15.html">Chapter 15: Closed-Loop Reinvestment</a></li>
+                    <li><a href="#" data-chapter="md/chapter-19.html">Chapter 19: Issuing New Charters</a></li>
+                    <li><a href="#" data-chapter="md/chapter-20.html">Chapter 20: Growth as Responsibility, Not Expansion</a></li>
+                    <li><a href="#" data-chapter="md/chapter-21.html">Chapter 21: Guarding Against Drift</a></li>
+                    <li><a href="#" data-chapter="md/chapter-22.html">Chapter 22: What Keepwell Refuses to Become</a></li>
+                    <li><a href="#" data-chapter="md/chapter-23.html">Chapter 23: Common Misunderstandings</a></li>
+                    <li><a href="#" data-chapter="md/chapter-24.html">Chapter 24: Amendment and Evolution</a></li>
+                    <li><a href="#" data-chapter="md/chapter-25.html">Chapter 25: Stewardship Across Generations</a></li>
+                </ul>
+            </nav>
+            <div class="download-section">
+                <h3>Download Options</h3>
+                <div class="download-links">
+                    <a href="charter-book.html">📄 Single Page HTML</a>
+                    <a href="charter-book.pdf">📕 Download PDF</a>
+                    <a href="charter-book.epub">📚 Download EPUB</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Chapter Viewer -->
+        <main class="chapter-viewer" id="chapterViewer">
+            <div class="chapter-content" id="chapterContent">
+                <div class="loading">
+                    <h2>Welcome to Charter Book</h2>
+                    <p>Select a chapter from the left sidebar to begin reading.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile TOC Toggle Button -->
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Table of Contents">
+        ☰
+    </button>
+
+    <script>
+        // Book Viewer JavaScript
+        const tocList = document.getElementById('tocList');
+        const chapterContent = document.getElementById('chapterContent');
+        const chapterViewer = document.getElementById('chapterViewer');
+        const tocSidebar = document.getElementById('tocSidebar');
+        const mobileToggle = document.getElementById('mobileToggle');
+
+        // Load chapter content
+        async function loadChapter(chapterFile) {
+            try {
+                chapterContent.innerHTML = '<div class="loading">Loading chapter...</div>';
+                
+                const response = await fetch(chapterFile);
+                if (!response.ok) throw new Error('Failed to load chapter');
+                
+                const html = await response.text();
+                
+                // Parse the HTML to extract just the content
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const body = doc.body;
+                
+                // Remove navigation elements if present
+                const nav = body.querySelector('.chapter-nav');
+                if (nav) nav.remove();
+                
+                // Extract and display content
+                chapterContent.innerHTML = body.innerHTML;
+                
+                // Scroll to top of chapter viewer
+                chapterViewer.scrollTop = 0;
+                
+                // Update URL hash
+                window.location.hash = chapterFile;
+                
+                // Update active state in TOC
+                updateActiveTOC(chapterFile);
+                
+                // Close mobile menu if open
+                if (window.innerWidth <= 768) {
+                    tocSidebar.classList.remove('open');
+                }
+            } catch (error) {
+                chapterContent.innerHTML = `
+                    <div class="loading">
+                        <h2>Error Loading Chapter</h2>
+                        <p>Could not load the chapter. Please try again.</p>
+                    </div>
+                `;
+                console.error('Error loading chapter:', error);
+            }
+        }
+
+        // Update active TOC item
+        function updateActiveTOC(chapterFile) {
+            const links = tocList.querySelectorAll('a');
+            links.forEach(link => {
+                if (link.dataset.chapter === chapterFile) {
+                    link.classList.add('active');
+                    // Scroll TOC to show active item
+                    link.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        // Handle TOC clicks
+        tocList.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                e.preventDefault();
+                const chapterFile = e.target.dataset.chapter;
+                if (chapterFile) {
+                    loadChapter(chapterFile);
+                }
+            }
+        });
+
+        // Mobile toggle handler
+        mobileToggle.addEventListener('click', () => {
+            tocSidebar.classList.toggle('open');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768 && 
+                tocSidebar.classList.contains('open') &&
+                !tocSidebar.contains(e.target) && 
+                e.target !== mobileToggle) {
+                tocSidebar.classList.remove('open');
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const activeLink = tocList.querySelector('a.active');
+            if (!activeLink) return;
+
+            let nextLink = null;
+            
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                // Next chapter
+                const nextLi = activeLink.parentElement.nextElementSibling;
+                if (nextLi) nextLink = nextLi.querySelector('a');
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                // Previous chapter
+                const prevLi = activeLink.parentElement.previousElementSibling;
+                if (prevLi) nextLink = prevLi.querySelector('a');
+            }
+
+            if (nextLink) {
+                e.preventDefault();
+                loadChapter(nextLink.dataset.chapter);
+            }
+        });
+
+        // Load chapter from URL hash on page load
+        window.addEventListener('load', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                loadChapter(hash);
+            } else {
+                // Load first chapter by default
+                const firstLink = tocList.querySelector('a');
+                if (firstLink) {
+                    loadChapter(firstLink.dataset.chapter);
+                }
+            }
+        });
+
+        // Handle browser back/forward
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                loadChapter(hash);
+            }
+        });
+    </script>
+</body>
+</html>

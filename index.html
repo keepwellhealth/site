@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Keepwell Health Union</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary-color: #27ae60;
+            --secondary-color: #2c3e50;
+            --accent-color: #3498db;
+            --light-gray: #ecf0f1;
+            --dark-gray: #34495e;
+            --text-color: #2c3e50;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Lexend", "Helvetica Neue", "Helvetica", sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(135deg, #5a7bd8 0%, #0f3c48 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--white);
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            font-weight: 300;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+        }
+
+        .intro-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .intro-card h2 {
+            color: var(--secondary-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .intro-card p {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .point-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .point-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        .point-card .icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .point-card h3 {
+            color: var(--secondary-color);
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .point-card p {
+            color: var(--dark-gray);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .documents-section {
+            margin: 4rem 0;
+        }
+
+        .documents-section h2 {
+            text-align: center;
+            color: var(--white);
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 700;
+        }
+
+        .document-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .doc-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .doc-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            border-left-color: var(--accent-color);
+        }
+
+        .doc-card .doc-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .doc-card h3 {
+            color: var(--secondary-color);
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .doc-card p {
+            color: var(--dark-gray);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .doc-card .read-more {
+            color: var(--accent-color);
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .doc-card:hover .read-more {
+            gap: 0.75rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--white);
+            opacity: 0.9;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+
+            .tagline {
+                font-size: 1.2rem;
+            }
+
+            .intro-card {
+                padding: 2rem;
+            }
+
+            .intro-card h2 {
+                font-size: 1.6rem;
+            }
+
+            .documents-section h2 {
+                font-size: 2rem;
+            }
+
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="logo"><i class="fas fa-heart-pulse"></i> Keepwell Health Union</h1>
+            <p class="tagline">A nonprofit healthcare cooperative</p>
+        </header>
+
+        <div class="intro-card">
+            <h2>Healthcare That Works For People, Not Profit</h2>
+            <p>
+                Keepwell Health Union is a nonprofit, clinician-led healthcare cooperative designed to provide 
+                high-quality, humane, and cost-predictable care by removing insurance from routine medical 
+                decision-making and confining it to catastrophic risk where it belongs.
+            </p>
+            <p>
+                We deliver primary care, mental health, urgent care, diagnostics, and care coordination directly 
+                to members through employer-based enrollment. The result is a healthcare system that is simpler, 
+                more transparent, more humane, and economically sustainable—without denying care or shifting 
+                risk onto patients.
+            </p>
+        </div>
+
+        <div class="key-points">
+            <div class="point-card">
+                <div class="icon"><i class="fas fa-hand-holding-heart"></i></div>
+                <h3>Patient-First Care</h3>
+                <p>Direct access to primary care, mental health, and urgent care without insurance friction or delays.</p>
+            </div>
+
+            <div class="point-card">
+                <div class="icon"><i class="fas fa-shield-heart"></i></div>
+                <h3>Catastrophic Protection</h3>
+                <p>Reinsurance coverage for rare, high-cost events while keeping routine care simple and direct.</p>
+            </div>
+
+            <div class="point-card">
+                <div class="icon"><i class="fas fa-dollar-sign"></i></div>
+                <h3>Predictable Costs</h3>
+                <p>Transparent pricing and stable costs for employers, saving $250-$550 per employee per month.</p>
+            </div>
+
+            <div class="point-card">
+                <div class="icon"><i class="fas fa-users"></i></div>
+                <h3>Cooperative Model</h3>
+                <p>No shareholders. Member-first governance. Surplus reinvested into better care and expanded access.</p>
+            </div>
+        </div>
+
+        <section class="documents-section">
+            <h2>Learn More</h2>
+            <div class="document-cards">
+                <a href="proposal.html" class="doc-card">
+                    <div class="doc-icon"><i class="fas fa-file-contract"></i></div>
+                    <h3>Full Proposal</h3>
+                    <p>
+                        Comprehensive overview of the Keepwell model, including organizational structure, 
+                        scope of care, reinsurance strategy, staffing model, and financial projections.
+                    </p>
+                    <span class="read-more">Read Proposal <i class="fas fa-arrow-right"></i></span>
+                </a>
+
+                <a href="memo.html" class="doc-card">
+                    <div class="doc-icon"><i class="fas fa-file-alt"></i></div>
+                    <h3>Concept Memo</h3>
+                    <p>
+                        Executive summary outlining the problem with current healthcare, the cooperative solution, 
+                        and the initial launch plan with funding requirements.
+                    </p>
+                    <span class="read-more">Read Memo <i class="fas fa-arrow-right"></i></span>
+                </a>
+
+                <a href="concept.html" class="doc-card">
+                    <div class="doc-icon"><i class="fas fa-lightbulb"></i></div>
+                    <h3>Detailed Concept</h3>
+                    <p>
+                        In-depth exploration of the fiduciary healthcare model, San Francisco pilot program, 
+                        financial comparisons, and cost-benefit analysis over time.
+                    </p>
+                    <span class="read-more">Read Concept <i class="fas fa-arrow-right"></i></span>
+                </a>
+                
+                <a href="charter.html" class="doc-card">
+                    <div class="doc-icon"><i class="fas fa-book"></i></div>
+                    <h3>Charter & Consititution</h3>
+                    <p>
+                        The proposed constitution and master charter for Keepwell defining our core beliefs, responsibilities, membership, governance and general rulebook for our organization.
+                    </p>
+                    <span class="read-more">Read Master Charter <i class="fas fa-arrow-right"></i></span>
+                </a>
+
+                <a href="charter/bylaws.html" class="doc-card">
+                    <div class="doc-icon"><i class="fas fa-gavel"></i></div>
+                    <h3>Model Bylaws</h3>
+                    <p>
+                        Comprehensive bylaws template for local Keepwell unions, implementing fiduciary governance, 
+                        outcome-linked compensation, and immutable principles from the Charter Book.
+                    </p>
+                    <span class="read-more">View Bylaws <i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            <p><strong>Keepwell Health Union</strong></p>
+            <p>Healthcare designed for humans, governed by humans.</p>
+        </footer>
+    </div>
+</body>
+</html>
