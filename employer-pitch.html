@@ -1,0 +1,186 @@
+<!-- employer-pitch.html — KeepWell 1-page employer overview landing page -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KeepWell Health Union — Employer Overview</title>
+  <meta name="description" content="One-page employer overview for KeepWell Health Union." />
+  <style>
+    :root{
+      --bg:#06101b; --text:#eff5ff; --muted:#b7c6e6;
+      --line:rgba(255,255,255,.12);
+      --accent:#86b7ff; --accent2:#7ef0c8;
+      --shadow:0 22px 70px rgba(0,0,0,.55);
+      --radius:18px; --max:1060px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 18% -10%, rgba(134,183,255,.20), transparent 60%),
+        radial-gradient(900px 700px at 90% 10%, rgba(126,240,200,.14), transparent 55%),
+        radial-gradient(1000px 900px at 50% 120%, rgba(134,183,255,.10), transparent 60%),
+        var(--bg);
+    }
+    .wrap{max-width:var(--max); margin:0 auto; padding:52px 20px 80px;}
+    header{display:flex; align-items:flex-start; justify-content:space-between; gap:18px; margin-bottom:22px;}
+    .brand{display:flex; gap:14px; align-items:center;}
+    .mark{
+      width:46px; height:46px; border-radius:16px;
+      background: linear-gradient(135deg, rgba(134,183,255,.92), rgba(126,240,200,.86));
+      box-shadow: 0 14px 34px rgba(134,183,255,.18);
+    }
+    .kicker{color:var(--muted); font-size:13px; letter-spacing:.18em; text-transform:uppercase;}
+    h1{margin:.25rem 0 0; font-size:34px; line-height:1.12;}
+    .sub{margin:.6rem 0 0; color:var(--muted); max-width:75ch;}
+    .actions{display:flex; gap:10px; flex-wrap:wrap;}
+    .btn{
+      color: #77b9da;
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 14px; border-radius:12px;
+      border:1px solid var(--line); background: rgba(255,255,255,.04);
+      text-decoration:none; font-weight:700; cursor:pointer;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+      backdrop-filter: blur(10px);
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.18);}
+    .btn.primary{
+      border-color: rgba(134,183,255,.45);
+      background: linear-gradient(135deg, rgba(134,183,255,.22), rgba(126,240,200,.12));
+    }
+
+    .hero{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .heroTop{
+      padding:18px 22px;
+      background: rgba(0,0,0,.16);
+      border-bottom: 1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .pill{
+      font-size:12px; color:var(--muted);
+      border:1px solid var(--line); padding:6px 10px; border-radius:999px;
+      background: rgba(255,255,255,.03);
+      white-space:nowrap;
+    }
+    .grid{display:grid; grid-template-columns: 1fr 1fr; gap:14px; padding:18px 22px 22px;}
+    @media (max-width: 900px){ header{flex-direction:column;} .grid{grid-template-columns:1fr;} }
+    .card{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px; padding:16px;
+      background: rgba(0,0,0,.14);
+    }
+    .h{margin:0 0 8px; font-weight:900;}
+    .p{margin:0; color:var(--muted);}
+    ul{margin:10px 0 0 18px; color:var(--muted);}
+    li{margin:6px 0;}
+    .metrics{display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-top:14px;}
+    @media (max-width: 700px){ .metrics{grid-template-columns:1fr;} }
+    .m{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px; padding:14px;
+      background: rgba(255,255,255,.03);
+    }
+    .m b{display:block; font-size:20px; margin-bottom:4px;}
+    .m span{color:var(--muted); font-size:13px;}
+    .cta{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;
+    }
+    .mini{font-size:12px; color:var(--muted); margin-top:10px;}
+    footer{margin-top:18px; color:var(--muted); font-size:12px;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <div class="kicker">KeepWell Health Union</div>
+          <h1>Employer Overview</h1>
+          <p class="sub">A better healthcare benefit: direct primary care at a flat <b>$500 PMPM</b>, with catastrophic events covered via reinsurance. Built for access, continuity, and predictable employer cost.</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn primary" href="KeepWell_Employer_Pitch.pdf" download>Download PDF</a>
+        <button class="btn" type="button" onclick="window.print()">Print</button>
+        <!-- Replace with your contact endpoint -->
+        <a class="btn" href="mailto:?subject=KeepWell%20Health%20Union%20%E2%80%94%20Employer%20Overview&body=Sharing%20a%20one-page%20overview%20of%20KeepWell%20Health%20Union%3A%20">Email</a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="heroTop">
+        <div style="font-weight:900;">The gist</div>
+        <div class="pill">Downtown SF • Founding employers</div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <p class="h">What employees get</p>
+          <ul>
+            <li>Same/next-day appointments</li>
+            <li>Longer visits + continuity of care</li>
+            <li>Preventive and chronic care management</li>
+            <li>Navigation for specialty and hospital care</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <p class="h">What employers get</p>
+          <ul>
+            <li>Lower, predictable healthcare costs</li>
+            <li>Reduced sick days and burnout</li>
+            <li>No annual premium roulette</li>
+            <li>A benefit employees actually use</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <p class="h">How it works</p>
+          <p class="p">Employers pay a flat PMPM. KeepWell operates the clinic. Reinsurance covers major medical events. Membership is capped to preserve care quality.</p>
+
+          <div class="metrics">
+            <div class="m"><b>$500</b><span>PMPM</span></div>
+            <div class="m"><b>1,500–3,000</b><span>Members per clinic (cap)</span></div>
+            <div class="m"><b>SF</b><span>Initial launch market</span></div>
+          </div>
+
+          <div class="cta">
+            <a class="btn primary" href="loi.html">Request an LOI</a>
+            <a class="btn" href="capital-memo.html">View capital memo</a>
+          </div>
+          <div class="mini">Tip: Most employers start with an LOI first, then convert to a membership agreement closer to launch.</div>
+        </div>
+
+        <div class="card">
+          <p class="h">Cost comparison (typical SF market)</p>
+          <p class="p"><b>Typical:</b> $700–$1,000 PMPM<br/><b>KeepWell:</b> $500 PMPM</p>
+          <div class="mini">Numbers vary by plan design and demographics; KeepWell is designed to be stable and transparent.</div>
+
+          <div style="height:12px"></div>
+          <p class="h">Launch</p>
+          <p class="p">Downtown San Francisco clinic opening soon. Founding employer participation now available.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="year"></span> KeepWell Health Union.
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

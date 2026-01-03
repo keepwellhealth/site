@@ -1,0 +1,226 @@
+<!-- loi.html — KeepWell Employer LOI landing page -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KeepWell Health Union — Employer LOI</title>
+  <meta name="description" content="Employer Letter of Intent for KeepWell Health Union." />
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#0f1a33;
+      --card2:#0c172e;
+      --text:#e8eefc;
+      --muted:#b8c4e6;
+      --line:rgba(255,255,255,.12);
+      --accent:#86b7ff;
+      --accent2:#7ef0c8;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --max: 1040px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 20% -10%, rgba(134,183,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 90% 10%, rgba(126,240,200,.18), transparent 55%),
+        radial-gradient(900px 900px at 50% 120%, rgba(134,183,255,.10), transparent 60%),
+        var(--bg);
+    }
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:48px 20px 80px;}
+    header{display:flex; align-items:flex-start; justify-content:space-between; gap:18px; margin-bottom:26px;}
+    .brand{display:flex; gap:14px; align-items:center;}
+    .mark{
+      width:44px; height:44px; border-radius:14px;
+      background: linear-gradient(135deg, rgba(134,183,255,.9), rgba(126,240,200,.85));
+      box-shadow: 0 12px 30px rgba(134,183,255,.18);
+    }
+    .kicker{color:var(--muted); font-size:13px; letter-spacing:.18em; text-transform:uppercase;}
+    h1{margin:.25rem 0 0; font-size:32px; line-height:1.15;}
+    .sub{margin:.6rem 0 0; color:var(--muted); max-width:60ch;}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end;}
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 14px; border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      text-decoration:none; font-weight:600;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+      backdrop-filter: blur(10px);
+      cursor:pointer;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.18);}
+    .btn.primary{
+      border-color: rgba(134,183,255,.45);
+      background: linear-gradient(135deg, rgba(134,183,255,.22), rgba(126,240,200,.12));
+    }
+    .grid{display:grid; grid-template-columns: 1.15fr .85fr; gap:18px;}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr;} header{flex-direction:column; align-items:flex-start;} .actions{justify-content:flex-start;} }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .pad{padding:22px 22px 18px;}
+    .card .head{
+      padding:16px 22px;
+      border-bottom:1px solid var(--line);
+      background: rgba(0,0,0,.14);
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .title{font-weight:800; letter-spacing:.01em;}
+    .pill{
+      font-size:12px; color:var(--muted);
+      border:1px solid var(--line); padding:6px 10px; border-radius:999px;
+      background: rgba(255,255,255,.03);
+    }
+    .section{padding:18px 22px; border-top:1px solid rgba(255,255,255,.06);}
+    .section:first-child{border-top:none}
+    .h{font-weight:800; margin:0 0 6px;}
+    .p{margin:0; color:var(--muted);}
+    ul{margin:10px 0 0 18px; color:var(--muted);}
+    li{margin:6px 0;}
+    .mini{font-size:13px; color:var(--muted);}
+    .hr{height:1px; background:rgba(255,255,255,.10); margin:16px 0;}
+    .sig{
+      display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    }
+    @media (max-width:640px){ .sig{grid-template-columns:1fr;} }
+    .sig .box{
+      border:1px dashed rgba(255,255,255,.20);
+      border-radius:14px;
+      padding:14px;
+      background: rgba(255,255,255,.02);
+      min-height:92px;
+    }
+    .sig .lab{font-weight:700; margin:0 0 8px;}
+    .sig .line{height:1px; background:rgba(255,255,255,.14); margin:18px 0 10px;}
+    footer{margin-top:22px; color:var(--muted); font-size:12px;}
+    code.inline{background:rgba(255,255,255,.06); padding:2px 6px; border-radius:8px; border:1px solid rgba(255,255,255,.10);}
+    .toast{display:none;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <div class="kicker">KeepWell Health Union</div>
+          <h1>Employer Letter of Intent (LOI)</h1>
+          <p class="sub">A simple, non-binding LOI employers can sign to confirm intent to enroll employees at launch—useful for fundraising, reinsurance conversations, and lease negotiations.</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <!-- Update href to your PDF path/url -->
+        <a class="btn primary" href="KeepWell_Employer_LOI.pdf" download>Download PDF</a>
+        <button class="btn" id="printBtn" type="button">Print</button>
+        <button class="btn" id="copyBtn" type="button">Copy link</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <div class="head">
+          <div class="title">LOI Summary</div>
+          <div class="pill">Non-binding • 90–120 day term</div>
+        </div>
+
+        <div class="section">
+          <p class="h">Purpose</p>
+          <p class="p">This LOI confirms preliminary interest in participating in KeepWell Health Union, a nonprofit healthcare cooperative providing employer-sponsored primary care with catastrophic coverage via reinsurance.</p>
+        </div>
+
+        <div class="section">
+          <p class="h">Intended Participation</p>
+          <p class="p">Employer intends, subject to final agreement, to enroll approximately <code class="inline">____</code> employees upon launch of the initial San Francisco clinic.</p>
+        </div>
+
+        <div class="section">
+          <p class="h">Anticipated Terms</p>
+          <ul>
+            <li><strong>Membership Fee:</strong> $500 per member per month (PMPM), paid by Employer.</li>
+            <li><strong>Services:</strong> Comprehensive primary care, chronic care management, preventive services, care navigation.</li>
+            <li><strong>Coverage Scope:</strong> Primary care delivered directly by KeepWell clinicians; hospitalizations and major procedures covered via third-party reinsurance.</li>
+            <li><strong>Clinic Location:</strong> Downtown San Francisco (Financial District or SOMA).</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <p class="h">Conditions</p>
+          <p class="p">Contingent upon clinic opening, regulatory approvals, availability of reinsurance coverage, and execution of final membership agreements.</p>
+        </div>
+
+        <div class="section">
+          <p class="h">Term</p>
+          <p class="p">Expires 90–120 days from execution unless extended by mutual agreement.</p>
+        </div>
+
+        <div class="section">
+          <p class="h">Signatures</p>
+          <div class="sig">
+            <div class="box">
+              <p class="lab">Employer</p>
+              <div class="line"></div>
+              <div class="mini">Name / Title / Company / Date</div>
+            </div>
+            <div class="box">
+              <p class="lab">KeepWell Health Union</p>
+              <div class="line"></div>
+              <div class="mini">Authorized Signatory / Title / Date</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="card">
+        <div class="head">
+          <div class="title">How to Use This</div>
+          <div class="pill">Fast path</div>
+        </div>
+        <div class="pad">
+          <p class="p">Use the LOI to show traction without forcing employers to switch plans immediately.</p>
+          <div class="hr"></div>
+          <ul>
+            <li>Send as PDF + ask for employee count + signer.</li>
+            <li>Collect 3–5 LOIs before fundraising.</li>
+            <li>Share anonymized totals with investors/reinsurers.</li>
+          </ul>
+          <div class="hr"></div>
+          <p class="mini">Tip: keep it “non-binding” until clinic opening date, then convert to a membership agreement.</p>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      © <span id="year"></span> KeepWell Health Union. This page is informational and does not create a binding agreement.
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    document.getElementById("printBtn").addEventListener("click", () => window.print());
+
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        const btn = document.getElementById("copyBtn");
+        const old = btn.textContent;
+        btn.textContent = "Copied!";
+        setTimeout(() => (btn.textContent = old), 900);
+      } catch {
+        alert("Couldn’t copy automatically. URL: " + window.location.href);
+      }
+    });
+  </script>
+</body>
+</html>
