@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Keepwell Health Union — Financial Dashboard</title>
+  <style>
+    :root { --bg:#0b0d12; --card:#121623; --text:#e7ecff; --muted:#aab3d6; --line:#2a3352; --accent:#7aa2ff; }
+    * { box-sizing: border-box; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+    body { margin:0; background:linear-gradient(180deg,#0b0d12,#070910); color:var(--text); }
+    header { padding: 18px 18px 8px; border-bottom:1px solid var(--line); position:sticky; top:0; backdrop-filter: blur(10px); background:rgba(11,13,18,.8); z-index:10;}
+    header h1 { margin:0; font-size:18px; font-weight:700; letter-spacing:.2px; }
+    header .sub { margin-top:6px; color:var(--muted); font-size:12px; }
+    main { padding: 16px 18px 28px; display:grid; gap:14px; grid-template-columns: 420px 1fr; }
+    @media (max-width: 1100px){ main { grid-template-columns:1fr; } }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+    .grid { display:grid; gap:10px; }
+    .controls { grid-template-columns: 1fr; }
+    .section-title { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:#cbd3ff; margin:6px 0 2px; }
+    .row { display:grid; grid-template-columns: 1fr 150px; gap:10px; align-items:center; padding:8px 10px; border:1px solid rgba(42,51,82,.7); border-radius:12px; }
+    label { font-size:13px; }
+    .hint { display:block; color:var(--muted); font-size:11px; margin-top:2px; }
+    input[type="range"]{ width:100%; }
+    input[type="number"]{ width:100%; padding:8px 10px; border-radius:10px; border:1px solid rgba(42,51,82,.9); background:#0d1120; color:var(--text); }
+    .kpis { display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; }
+    @media (max-width: 900px){ .kpis { grid-template-columns:1fr; } }
+    .kpi { padding:12px; border:1px solid rgba(42,51,82,.7); border-radius:14px; background:rgba(13,17,32,.7); }
+    .kpi .name { color:var(--muted); font-size:12px; }
+    .kpi .val { font-size:18px; font-weight:700; margin-top:4px; }
+    .kpi-good { border-color:rgba(34,197,94,.4); background:rgba(34,197,94,.08); }
+    .kpi-good .val { color:#4ade80; }
+    .kpi-caution { border-color:rgba(250,204,21,.4); background:rgba(250,204,21,.08); }
+    .kpi-caution .val { color:#facc15; }
+    .kpi-bad { border-color:rgba(239,68,68,.4); background:rgba(239,68,68,.08); }
+    .kpi-bad .val { color:#ef4444; }
+    .kpi-neutral { }
+    .charts { display:grid; gap:14px; }
+    canvas { width:100%; height:320px; background:rgba(13,17,32,.7); border-radius:16px; border:1px solid rgba(42,51,82,.7); }
+    .chart-title { margin:0 0 8px; font-size:13px; color:#cbd3ff; }
+    .btnbar { display:flex; gap:10px; flex-wrap:wrap; }
+    button { cursor:pointer; background:#0d1120; color:var(--text); border:1px solid rgba(42,51,82,.9); border-radius:12px; padding:10px 12px; }
+    button:hover { border-color:#6f87ff; }
+    .note { color:var(--muted); font-size:12px; line-height:1.45; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .success-dashboard { padding:16px; margin-bottom:12px; border-radius:16px; border:2px solid; }
+    .success-dashboard.healthy { background:rgba(34,197,94,.12); border-color:rgba(34,197,94,.5); }
+    .success-dashboard.caution { background:rgba(250,204,21,.12); border-color:rgba(250,204,21,.5); }
+    .success-dashboard.risk { background:rgba(239,68,68,.12); border-color:rgba(239,68,68,.5); }
+    .success-dashboard .status-badge { display:inline-flex; align-items:center; gap:6px; font-size:15px; font-weight:700; margin-bottom:10px; }
+    .success-dashboard.healthy .status-badge { color:#4ade80; }
+    .success-dashboard.caution .status-badge { color:#facc15; }
+    .success-dashboard.risk .status-badge { color:#ef4444; }
+    .success-dashboard .highlights { display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12px; line-height:1.6; }
+    .success-dashboard .highlight { display:flex; justify-content:space-between; }
+    .success-dashboard .highlight .label { color:var(--muted); }
+    .success-dashboard .highlight .value { font-weight:600; }
+    .capital-req { padding:14px; background:rgba(122,162,255,.12); border:1px solid rgba(122,162,255,.4); border-radius:12px; margin-bottom:12px; }
+    .capital-req .title { font-size:13px; font-weight:700; color:#7aa2ff; margin-bottom:8px; }
+    .capital-req .amount { font-size:24px; font-weight:700; color:#7aa2ff; margin-bottom:6px; }
+    .capital-req .details { font-size:11px; color:var(--muted); line-height:1.5; }
+    .warning-banner { padding:12px 14px; background:rgba(239,68,68,.15); border:1px solid rgba(239,68,68,.5); border-radius:12px; margin-bottom:12px; display:flex; align-items:start; gap:10px; }
+    .warning-banner .icon { font-size:18px; }
+    .warning-banner .message { font-size:12px; line-height:1.5; color:#fca5a5; }
+    .narrative { padding:14px; background:rgba(13,17,32,.55); border-radius:12px; margin-bottom:12px; }
+    .narrative .title { font-size:12px; font-weight:700; color:#cbd3ff; margin-bottom:6px; text-transform:uppercase; letter-spacing:.1em; }
+    .narrative .content { font-size:13px; line-height:1.6; color:var(--text); }
+    .toggle-controls { width:100%; margin:12px 0; padding:10px; background:rgba(122,162,255,.1); border:1px solid rgba(122,162,255,.3); border-radius:10px; font-size:13px; font-weight:600; color:#7aa2ff; }
+    .toggle-controls:hover { background:rgba(122,162,255,.15); }
+    .controls.collapsed { display:none; }
+    .version-info { position:fixed; bottom:10px; right:10px; font-size:10px; color:var(--muted); opacity:.5; }
+
+    @media print {
+      body { background:#fff; color:#000; }
+      .btnbar, .toggle-controls, .controls, .version-info { display:none !important; }
+      .card { background:#fff; border:1px solid #ddd; box-shadow:none; page-break-inside:avoid; }
+      .success-dashboard, .capital-req, .warning-banner, .narrative, .kpi { background:#f9f9f9 !important; border-color:#ddd !important; color:#000 !important; }
+      .success-dashboard *, .capital-req *, .warning-banner *, .narrative *, .kpi * { color:#000 !important; }
+      header { background:#fff; border-color:#ddd; }
+      main { grid-template-columns:1fr; }
+      .charts { page-break-before:always; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Keepwell Health Union — Financial Dashboard</h1>
+  <div class="sub">Interactive financial modeling • Real-time projections • Rock-solid planning • Press 'C' to toggle controls, 'R' to reset</div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="btnbar" style="margin-bottom:10px;">
+      <button id="presetPilot">Preset: Pilot</button>
+      <button id="presetMetro">Preset: Metro</button>
+      <button id="presetBest">Best Case</button>
+      <button id="presetWorst">Worst Case</button>
+      <button id="resetDefaults">Reset</button>
+      <button id="shareScenario">📤 Share</button>
+      <button id="exportPDF">📄 Export PDF</button>
+    </div>
+
+    <div id="successDashboard"></div>
+    <div id="capitalReq"></div>
+    <div id="warningBanner"></div>
+    <div id="narrative"></div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <button class="toggle-controls" id="toggleControls">▼ Show Detailed Controls</button>
+
+    <div class="grid controls collapsed" id="detailedControls" style="margin-top:12px;">
+      <div class="section-title">Timeline</div>
+      <div class="row">
+        <div>
+          <label>Months to model</label>
+          <span class="hint">How far the projection runs.</span>
+        </div>
+        <input id="months" type="number" min="6" max="120" step="1" />
+      </div>
+
+      <div class="section-title">Membership</div>
+      <div class="row">
+        <div>
+          <label>Starting members</label>
+          <span class="hint">Members at Month 1 start.</span>
+        </div>
+        <input id="startMembers" type="number" min="0" step="10" />
+      </div>
+      <div class="row">
+        <div>
+          <label>New members / month</label>
+          <span class="hint">Linear acquisition (simple on purpose).</span>
+        </div>
+        <input id="newPerMonth" type="number" min="0" step="10" />
+      </div>
+      <div class="row">
+        <div>
+          <label>Monthly churn (%)</label>
+          <span class="hint">Members lost each month as % of starting members that month.</span>
+        </div>
+        <input id="churnPct" type="number" min="0" max="20" step="0.1" />
+      </div>
+
+      <div class="section-title">Pricing & Coverage</div>
+      <div class="row">
+        <div>
+          <label>PMPM fee ($)</label>
+          <span class="hint">Per member per month membership fee.</span>
+        </div>
+        <input id="pmpm" type="number" min="50" step="10" />
+      </div>
+      <div class="row">
+        <div>
+          <label>Reinsurance PMPM ($)</label>
+          <span class="hint">Catastrophic coverage cost per member per month.</span>
+        </div>
+        <input id="rePmpm" type="number" min="0" step="5" />
+      </div>
+
+      <div class="section-title">Facilities</div>
+      <div class="row">
+        <div>
+          <label>Members per clinic</label>
+          <span class="hint">Used to compute clinic count = ceil(members / capacity).</span>
+        </div>
+        <input id="membersPerClinic" type="number" min="100" step="100" />
+      </div>
+      <div class="row">
+        <div>
+          <label>Rent per clinic / month ($)</label>
+          <span class="hint">All-in rent + utilities per clinic site.</span>
+        </div>
+        <input id="rentPerClinic" type="number" min="0" step="1000" />
+      </div>
+
+      <div class="section-title">Staffing</div>
+      <div class="row">
+        <div>
+          <label>Members per clinician</label>
+          <span class="hint">Clinicians = members / this ratio.</span>
+        </div>
+        <input id="membersPerClinician" type="number" min="100" step="50" />
+      </div>
+      <div class="row">
+        <div>
+          <label>MAs per clinician</label>
+          <span class="hint">MA count = clinicians * this.</span>
+        </div>
+        <input id="maPerClinician" type="number" min="0" step="0.25" />
+      </div>
+      <div class="row">
+        <div>
+          <label>Clinician salary / month ($)</label>
+          <span class="hint">Fully-loaded monthly cost per clinician.</span>
+        </div>
+        <input id="clinSalary" type="number" min="0" step="500" />
+      </div>
+      <div class="row">
+        <div>
+          <label>MA salary / month ($)</label>
+          <span class="hint">Fully-loaded monthly cost per MA.</span>
+        </div>
+        <input id="maSalary" type="number" min="0" step="250" />
+      </div>
+
+      <div class="section-title">Overhead & Startup</div>
+      <div class="row">
+        <div>
+          <label>Other OpEx / month ($)</label>
+          <span class="hint">EHR, admin tools, legal/compliance, misc.</span>
+        </div>
+        <input id="otherOpex" type="number" min="0" step="500" />
+      </div>
+      <div class="row">
+        <div>
+          <label>Overhead rate (%)</label>
+          <span class="hint">Applied to (staff + rent + other OpEx).</span>
+        </div>
+        <input id="overheadPct" type="number" min="0" max="50" step="0.1" />
+      </div>
+      <div class="row">
+        <div>
+          <label>Startup cost ($)</label>
+          <span class="hint">One-time spend injected in the chosen month.</span>
+        </div>
+        <input id="startupCost" type="number" min="0" step="50000" />
+      </div>
+      <div class="row">
+        <div>
+          <label>Startup month (1..N)</label>
+          <span class="hint">Which month the startup spend hits cash flow.</span>
+        </div>
+        <input id="startupMonth" type="number" min="1" step="1" />
+      </div>
+      <div class="row">
+        <div>
+          <label>Starting cash ($)</label>
+          <span class="hint">Initial cash on hand to fund the ramp.</span>
+        </div>
+        <input id="startingCash" type="number" step="50000" />
+      </div>
+
+      <div class="card" style="margin-top:6px; background:rgba(13,17,32,.55);">
+        <div class="note">
+          Model philosophy (a.k.a. the honest simplification): this is a deterministic, monthly, linear-acquisition model.
+          It’s meant for steering, not prophecy. Once you like the shape of the curve, we can add “real world cruelty”
+          (seasonality, cohort churn, hiring lags, visit demand, risk corridors, etc.).
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="charts">
+    <div class="card">
+      <p class="chart-title">Members</p>
+      <canvas id="chartMembers" width="1000" height="380"></canvas>
+    </div>
+    <div class="card">
+      <p class="chart-title">Revenue vs Costs</p>
+      <canvas id="chartRevCost" width="1000" height="380"></canvas>
+    </div>
+    <div class="card">
+      <p class="chart-title">Surplus & Cash</p>
+      <canvas id="chartSurplusCash" width="1000" height="380"></canvas>
+    </div>
+  </section>
+</main>
+
+<div class="version-info">v2.0 • Enhanced • 2026</div>
+
+<script>
+  // ---------- utilities ----------
+  const $ = (id) => document.getElementById(id);
+  const fmtMoney = (n) => {
+    if (!isFinite(n)) return "—";
+    return n.toLocaleString(undefined, { style:"currency", currency:"USD", maximumFractionDigits:0 });
+  };
+  const fmtNum = (n) => (isFinite(n) ? n.toLocaleString(undefined, { maximumFractionDigits: 0 }) : "—");
+  const fmtPct = (n) => (isFinite(n) ? (n*100).toFixed(1) + "%" : "—");
+
+  function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+  // ---------- model ----------
+  function runModel(p){
+    const N = clamp(Math.floor(p.months), 6, 120);
+
+    const members = new Array(N).fill(0);
+    const revenue = new Array(N).fill(0);
+
+    const clinicians = new Array(N).fill(0);
+    const mas = new Array(N).fill(0);
+    const staffCost = new Array(N).fill(0);
+
+    const clinics = new Array(N).fill(0);
+    const rent = new Array(N).fill(0);
+
+    const other = new Array(N).fill(0);
+    const overhead = new Array(N).fill(0);
+
+    const opsTotal = new Array(N).fill(0);
+    const reins = new Array(N).fill(0);
+    const startup = new Array(N).fill(0);
+
+    const totalCost = new Array(N).fill(0);
+    const surplus = new Array(N).fill(0);
+    const cash = new Array(N).fill(0);
+
+    let mStart = Math.max(0, p.startMembers);
+    let cashBal = p.startingCash;
+
+    for (let t=0; t<N; t++){
+      const churned = mStart * (p.churnPct/100);
+      const mEnd = Math.max(0, mStart + p.newPerMonth - churned);
+
+      members[t] = mEnd;
+
+      revenue[t] = mEnd * p.pmpm;
+
+      clinicians[t] = mEnd / Math.max(1, p.membersPerClinician);
+      mas[t] = clinicians[t] * p.maPerClinician;
+
+      staffCost[t] = clinicians[t]*p.clinSalary + mas[t]*p.maSalary;
+
+      clinics[t] = Math.ceil(mEnd / Math.max(1, p.membersPerClinic));
+      rent[t] = clinics[t] * p.rentPerClinic;
+
+      other[t] = p.otherOpex;
+      overhead[t] = (staffCost[t] + rent[t] + other[t]) * (p.overheadPct/100);
+
+      opsTotal[t] = staffCost[t] + rent[t] + other[t] + overhead[t];
+
+      reins[t] = mEnd * p.rePmpm;
+
+      if ((t+1) === clamp(Math.floor(p.startupMonth), 1, N)) startup[t] = Math.max(0, p.startupCost);
+
+      totalCost[t] = opsTotal[t] + reins[t] + startup[t];
+
+      surplus[t] = revenue[t] - totalCost[t];
+
+      cashBal += surplus[t];
+      cash[t] = cashBal;
+
+      mStart = mEnd;
+    }
+
+    // KPIs
+    const breakeven = surplus.findIndex(v => v >= 0) + 1 || null;
+    const cashPositive = cash.findIndex(v => v > 0) + 1 || null;
+    const last = N-1;
+
+    // Operating margin
+    const operatingMargin = revenue[last] > 0 ? surplus[last] / revenue[last] : 0;
+
+    // Min cash and when it occurs
+    let minCash = cash[0];
+    let minCashMonth = 1;
+    for (let i = 0; i < N; i++) {
+      if (cash[i] < minCash) {
+        minCash = cash[i];
+        minCashMonth = i + 1;
+      }
+    }
+
+    // Months of runway (average burn rate)
+    const negativeSurplus = surplus.filter(s => s < 0);
+    const avgBurn = negativeSurplus.length > 0
+      ? negativeSurplus.reduce((a,b) => a + Math.abs(b), 0) / negativeSurplus.length
+      : 0;
+    const runway = avgBurn > 0 ? cash[last] / avgBurn : (cash[last] > 0 ? 999 : 0);
+
+    // Unit economics (PMPM)
+    const unitEconomics = members[last] > 0 ? surplus[last] / members[last] : 0;
+
+    // Capital requirement (absolute value of min cash if negative)
+    const capitalRequired = Math.max(0, Math.abs(minCash) + (p.startingCash || 0));
+
+    return {
+      N, members, revenue, clinicians, mas, staffCost, clinics, rent, other, overhead,
+      opsTotal, reins, startup, totalCost, surplus, cash,
+      kpi: {
+        membersEnd: members[last],
+        revenueEnd: revenue[last],
+        costEnd: totalCost[last],
+        surplusEnd: surplus[last],
+        cashEnd: cash[last],
+        breakevenMonth: breakeven || "—",
+        cashPositiveMonth: cashPositive || "—",
+        operatingMargin,
+        minCash,
+        minCashMonth,
+        runway,
+        unitEconomics,
+        capitalRequired
+      }
+    };
+  }
+
+  // ---------- lightweight canvas charts ----------
+  function drawLineChart(canvas, series, opts){
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0,0,W,H);
+
+    const pad = 70;
+    const padRight = 20;
+    const padBottom = 50;
+    const plotW = W - pad - padRight;
+    const plotH = H - pad - padBottom;
+
+    // Flatten values
+    let all = [];
+    for (const s of series) all = all.concat(s.data);
+    const minY = (opts.minY !== undefined) ? opts.minY : Math.min(...all);
+    const maxY = (opts.maxY !== undefined) ? opts.maxY : Math.max(...all);
+
+    const y0 = (opts.zeroLine !== false) ? 0 : minY;
+    const lo = Math.min(minY, y0);
+    const hi = Math.max(maxY, y0);
+    const range = (hi - lo) || 1;
+
+    function x(i, n){ return pad + (i/(n-1))*plotW; }
+    function y(v){ return pad + (1 - ((v - lo)/range))*plotH; }
+
+    const n = series[0].data.length;
+
+    // Critical zone shading (for negative values)
+    if (opts.showNegativeZone && opts.zeroLine !== false) {
+      const zy = y(0);
+      ctx.fillStyle = "rgba(239,68,68,.08)";
+      ctx.fillRect(pad, zy, plotW, pad + plotH - zy);
+    }
+
+    // Grid with Y-axis labels
+    ctx.strokeStyle = "rgba(170,179,214,.22)";
+    ctx.lineWidth = 1;
+    ctx.fillStyle = "rgba(231,236,255,.7)";
+    ctx.font = "11px ui-sans-serif, system-ui";
+    const ticks = 5;
+    for (let i=0;i<=ticks;i++){
+      const yy = pad + (i/ticks)*plotH;
+      const val = hi - (i/ticks)*(hi-lo);
+      ctx.beginPath(); ctx.moveTo(pad, yy); ctx.lineTo(pad+plotW, yy); ctx.stroke();
+
+      // Y-axis labels
+      const label = opts.formatY ? opts.formatY(val) : val.toFixed(0);
+      ctx.textAlign = "right";
+      ctx.fillText(label, pad - 8, yy + 4);
+    }
+
+    // X-axis labels (months)
+    ctx.fillStyle = "rgba(231,236,255,.7)";
+    ctx.font = "11px ui-sans-serif, system-ui";
+    ctx.textAlign = "center";
+    const xTicks = Math.min(n, 7);
+    const xTickInterval = Math.floor((n - 1) / (xTicks - 1));
+    for (let i = 0; i < xTicks; i++) {
+      const idx = Math.min(i * xTickInterval, n - 1);
+      const xx = x(idx, n);
+      ctx.fillText(`M${idx + 1}`, xx, pad + plotH + 20);
+    }
+
+    // Zero line
+    if (opts.zeroLine !== false){
+      const zy = y(0);
+      ctx.strokeStyle = "rgba(122,162,255,.45)";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(pad, zy); ctx.lineTo(pad+plotW, zy); ctx.stroke();
+    }
+
+    // Break-even marker
+    if (opts.breakevenMonth && opts.breakevenMonth > 0 && opts.breakevenMonth <= n) {
+      const bx = x(opts.breakevenMonth - 1, n);
+      ctx.strokeStyle = "rgba(34,197,94,.6)";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(bx, pad);
+      ctx.lineTo(bx, pad + plotH);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Label
+      ctx.fillStyle = "rgba(34,197,94,.9)";
+      ctx.font = "bold 11px ui-sans-serif, system-ui";
+      ctx.textAlign = "center";
+      ctx.fillText(`Break-even M${opts.breakevenMonth}`, bx, pad - 8);
+    }
+
+    // Valley marker (min cash)
+    if (opts.valleyMonth && opts.valleyMonth > 0 && opts.valleyMonth <= n) {
+      const vx = x(opts.valleyMonth - 1, n);
+      ctx.strokeStyle = "rgba(239,68,68,.5)";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(vx, pad);
+      ctx.lineTo(vx, pad + plotH);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Label
+      ctx.fillStyle = "rgba(239,68,68,.9)";
+      ctx.font = "11px ui-sans-serif, system-ui";
+      ctx.textAlign = "center";
+      ctx.fillText(`Valley M${opts.valleyMonth}`, vx, pad + plotH + 35);
+    }
+
+    // Draw series
+    series.forEach((s, idx) => {
+      ctx.strokeStyle = s.color;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let i=0;i<n;i++){
+        const xx = x(i, n);
+        const yy = y(s.data[i]);
+        if (i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+      }
+      ctx.stroke();
+    });
+
+    // Legend
+    const lx = pad, ly = 20;
+    let off = 0;
+    series.forEach(s => {
+      ctx.fillStyle = s.color;
+      ctx.fillRect(lx+off, ly-10, 14, 4);
+      ctx.fillStyle = "rgba(231,236,255,.95)";
+      ctx.font = "12px ui-sans-serif, system-ui";
+      ctx.fillText(s.name, lx+off+18, ly-4);
+      off += 18 + ctx.measureText(s.name).width + 20;
+    });
+
+    // Title
+    if (opts.title){
+      ctx.fillStyle = "rgba(203,211,255,.95)";
+      ctx.font = "13px ui-sans-serif, system-ui";
+      ctx.textAlign = "left";
+      ctx.fillText(opts.title, pad, H - 10);
+    }
+  }
+
+  // ---------- UI wiring ----------
+  const state = {
+    months: 36,
+    startMembers: 500,
+    newPerMonth: 100,
+    churnPct: 1.0,
+    pmpm: 500,
+    rePmpm: 100,
+    membersPerClinic: 2500,
+    rentPerClinic: 25000,
+    membersPerClinician: 1000,
+    maPerClinician: 2,
+    clinSalary: 25000,
+    maSalary: 8000,
+    otherOpex: 15000,
+    overheadPct: 12,
+    startupCost: 2000000,
+    startupMonth: 1,
+    startingCash: 0
+  };
+
+  const presets = {
+    Pilot: { ...state },
+    Metro: {
+      months: 36,
+      startMembers: 1000,
+      newPerMonth: 250,
+      churnPct: 0.8,
+      pmpm: 450,
+      rePmpm: 120,
+      membersPerClinic: 3000,
+      rentPerClinic: 35000,
+      membersPerClinician: 900,
+      maPerClinician: 2,
+      clinSalary: 27000,
+      maSalary: 9000,
+      otherOpex: 25000,
+      overheadPct: 14,
+      startupCost: 3000000,
+      startupMonth: 1,
+      startingCash: 0
+    },
+    Best: {
+      months: 36,
+      startMembers: 500,
+      newPerMonth: 150,
+      churnPct: 0.5,
+      pmpm: 550,
+      rePmpm: 90,
+      membersPerClinic: 3000,
+      rentPerClinic: 22000,
+      membersPerClinician: 1100,
+      maPerClinician: 1.75,
+      clinSalary: 24000,
+      maSalary: 7500,
+      otherOpex: 12000,
+      overheadPct: 10,
+      startupCost: 1500000,
+      startupMonth: 1,
+      startingCash: 0
+    },
+    Worst: {
+      months: 36,
+      startMembers: 500,
+      newPerMonth: 60,
+      churnPct: 2.0,
+      pmpm: 450,
+      rePmpm: 130,
+      membersPerClinic: 2000,
+      rentPerClinic: 28000,
+      membersPerClinician: 850,
+      maPerClinician: 2.25,
+      clinSalary: 28000,
+      maSalary: 8500,
+      otherOpex: 18000,
+      overheadPct: 15,
+      startupCost: 2500000,
+      startupMonth: 1,
+      startingCash: 0
+    }
+  };
+
+  function bindNumber(id, key, {min=-Infinity,max=Infinity}={}){
+    const el = $(id);
+    el.value = state[key];
+    el.addEventListener("input", () => {
+      const v = Number(el.value);
+      state[key] = clamp(isFinite(v)?v:0, min, max);
+      render();
+    });
+  }
+
+  function setState(partial){
+    Object.assign(state, partial);
+    // push to inputs
+    Object.keys(state).forEach(k => {
+      const el = $(k);
+      if (el) el.value = state[k];
+    });
+    render();
+  }
+
+  function render(){
+    const res = runModel(state);
+
+    // Determine health status
+    const isHealthy = res.kpi.operatingMargin > 0.15 && res.kpi.minCash > -500000 && res.kpi.breakevenMonth !== "—" && res.kpi.breakevenMonth <= 24;
+    const isCaution = res.kpi.operatingMargin > 0 && res.kpi.minCash > -1000000;
+    const healthStatus = isHealthy ? 'healthy' : (isCaution ? 'caution' : 'risk');
+
+    // KPIs organized by category
+    const kpiSections = [
+      {
+        title: "Growth Metrics",
+        kpis: [
+          { name:"Members (end)", val: fmtNum(res.kpi.membersEnd), status: 'neutral' },
+          { name:"Member growth", val: state.newPerMonth > 0 ? `+${state.newPerMonth}/mo` : "—", status: 'neutral' }
+        ]
+      },
+      {
+        title: "Profitability",
+        kpis: [
+          { name:"Monthly surplus (end)", val: fmtMoney(res.kpi.surplusEnd), status: res.kpi.surplusEnd > 0 ? 'good' : 'bad' },
+          { name:"Operating margin", val: fmtPct(res.kpi.operatingMargin), status: res.kpi.operatingMargin > 0.15 ? 'good' : (res.kpi.operatingMargin > 0 ? 'caution' : 'bad') },
+          { name:"Unit economics (PMPM)", val: fmtMoney(res.kpi.unitEconomics), status: res.kpi.unitEconomics > 50 ? 'good' : (res.kpi.unitEconomics > 0 ? 'caution' : 'bad') },
+          { name:"Breakeven month", val: String(res.kpi.breakevenMonth), status: res.kpi.breakevenMonth !== "—" && res.kpi.breakevenMonth <= 24 ? 'good' : 'caution' }
+        ]
+      },
+      {
+        title: "Liquidity & Safety",
+        kpis: [
+          { name:"Ending cash", val: fmtMoney(res.kpi.cashEnd), status: res.kpi.cashEnd > 500000 ? 'good' : (res.kpi.cashEnd > 0 ? 'caution' : 'bad') },
+          { name:"Months of runway", val: res.kpi.runway < 999 ? res.kpi.runway.toFixed(1) : "∞", status: res.kpi.runway > 12 || res.kpi.runway === 999 ? 'good' : (res.kpi.runway > 6 ? 'caution' : 'bad') },
+          { name:"Min cash (valley)", val: fmtMoney(res.kpi.minCash), status: res.kpi.minCash > 0 ? 'good' : (res.kpi.minCash > -500000 ? 'caution' : 'bad') },
+          { name:"Valley occurs", val: `Month ${res.kpi.minCashMonth}`, status: 'neutral' }
+        ]
+      }
+    ];
+
+    const kpiWrap = $("kpis");
+    kpiWrap.innerHTML = "";
+
+    kpiSections.forEach(section => {
+      const sectionDiv = document.createElement("div");
+      sectionDiv.style.gridColumn = "1 / -1";
+      sectionDiv.className = "section-title";
+      sectionDiv.textContent = section.title;
+      kpiWrap.appendChild(sectionDiv);
+
+      section.kpis.forEach(k => {
+        const div = document.createElement("div");
+        div.className = `kpi kpi-${k.status}`;
+        div.innerHTML = `<div class="name">${k.name}</div><div class="val">${k.val}</div>`;
+        kpiWrap.appendChild(div);
+      });
+    });
+
+    // Success Dashboard
+    const successDash = $("successDashboard");
+    const statusLabel = healthStatus === 'healthy' ? '✓ Financial Viability: STRONG' :
+                        healthStatus === 'caution' ? '⚠ Financial Viability: MODERATE' :
+                        '⚠ Financial Viability: NEEDS ATTENTION';
+    successDash.innerHTML = `
+      <div class="success-dashboard ${healthStatus}">
+        <div class="status-badge">${statusLabel}</div>
+        <div class="highlights">
+          <div class="highlight"><span class="label">Break-even:</span><span class="value">Month ${res.kpi.breakevenMonth}</span></div>
+          <div class="highlight"><span class="label">Operating margin:</span><span class="value">${fmtPct(res.kpi.operatingMargin)}</span></div>
+          <div class="highlight"><span class="label">Peak capital need:</span><span class="value">${fmtMoney(res.kpi.capitalRequired)}</span></div>
+          <div class="highlight"><span class="label">Ending cash:</span><span class="value">${fmtMoney(res.kpi.cashEnd)}</span></div>
+        </div>
+      </div>
+    `;
+
+    // Capital Requirement
+    const capitalReqDiv = $("capitalReq");
+    if (res.kpi.capitalRequired > 0) {
+      capitalReqDiv.innerHTML = `
+        <div class="capital-req">
+          <div class="title">💰 Total Capital Required</div>
+          <div class="amount">${fmtMoney(res.kpi.capitalRequired)}</div>
+          <div class="details">
+            • Valley hits <strong>Month ${res.kpi.minCashMonth}</strong> at ${fmtMoney(res.kpi.minCash)}<br>
+            • Returns cash-positive: <strong>Month ${res.kpi.cashPositiveMonth || "—"}</strong><br>
+            • This is the minimum capital needed to avoid going negative
+          </div>
+        </div>
+      `;
+    } else {
+      capitalReqDiv.innerHTML = `
+        <div class="capital-req">
+          <div class="title">💰 Capital Requirement</div>
+          <div class="amount">$0</div>
+          <div class="details">Cash-positive from start! No external capital needed.</div>
+        </div>
+      `;
+    }
+
+    // Warning Banner
+    const warningDiv = $("warningBanner");
+    const warnings = [];
+    if (res.kpi.minCash < -2000000) warnings.push(`Cash valley drops to ${fmtMoney(res.kpi.minCash)} in Month ${res.kpi.minCashMonth}`);
+    if (res.kpi.breakevenMonth === "—") warnings.push("Never reaches break-even in projection period");
+    if (res.kpi.operatingMargin < 0) warnings.push(`Operating margin is negative at ${fmtPct(res.kpi.operatingMargin)}`);
+    if (res.kpi.unitEconomics < 0) warnings.push(`Unit economics are negative at ${fmtMoney(res.kpi.unitEconomics)} per member`);
+
+    if (warnings.length > 0) {
+      warningDiv.innerHTML = `
+        <div class="warning-banner">
+          <div class="icon">⚠️</div>
+          <div class="message">
+            <strong>Risk Factors:</strong><br>
+            ${warnings.map(w => `• ${w}`).join('<br>')}
+          </div>
+        </div>
+      `;
+    } else {
+      warningDiv.innerHTML = '';
+    }
+
+    // Narrative Context
+    const narrativeDiv = $("narrative");
+    const beMonth = res.kpi.breakevenMonth !== "—" ? res.kpi.breakevenMonth : "beyond the projection";
+    const narrative = res.kpi.breakevenMonth !== "—" && res.kpi.breakevenMonth <= 36
+      ? `With this plan, Keepwell Health Union reaches <strong>break-even in month ${beMonth}</strong>, requiring <strong>${fmtMoney(res.kpi.capitalRequired)}</strong> in startup capital. By month ${state.months}, the union generates <strong>${fmtMoney(res.kpi.surplusEnd)}</strong> monthly surplus (${fmtPct(res.kpi.operatingMargin)} margin) with <strong>${fmtMoney(res.kpi.cashEnd)}</strong> in reserves, demonstrating strong financial sustainability. Unit economics of <strong>${fmtMoney(res.kpi.unitEconomics)} PMPM</strong> show a viable business model.`
+      : res.kpi.breakevenMonth === "—"
+      ? `This scenario does not reach break-even within ${state.months} months. Consider adjusting pricing (PMPM), reducing costs (staffing ratios, overhead), accelerating growth, or securing more capital. Current unit economics: <strong>${fmtMoney(res.kpi.unitEconomics)} PMPM</strong>.`
+      : `This plan reaches break-even later than optimal (month ${beMonth}). Ending with <strong>${fmtMoney(res.kpi.cashEnd)}</strong> and ${fmtPct(res.kpi.operatingMargin)} operating margin. Consider ways to accelerate profitability.`;
+
+    narrativeDiv.innerHTML = `
+      <div class="narrative">
+        <div class="title">What This Means</div>
+        <div class="content">${narrative}</div>
+      </div>
+    `;
+
+    // Charts
+    const n = res.N;
+    const members = res.members;
+    const revenue = res.revenue;
+    const ops = res.opsTotal;
+    const reins = res.reins;
+    const total = res.totalCost;
+    const surplus = res.surplus;
+    const cash = res.cash;
+
+    const breakevenMonth = res.kpi.breakevenMonth !== "—" ? res.kpi.breakevenMonth : null;
+    const valleyMonth = res.kpi.minCashMonth;
+
+    drawLineChart($("chartMembers"), [
+      { name:"Members", data: members, color:"rgba(122,162,255,.95)" }
+    ], {
+      title:"Member growth trajectory",
+      zeroLine:false,
+      formatY: (v) => fmtNum(v)
+    });
+
+    drawLineChart($("chartRevCost"), [
+      { name:"Revenue", data: revenue, color:"rgba(122,255,178,.9)" },
+      { name:"Ops", data: ops, color:"rgba(255,201,122,.9)" },
+      { name:"Reinsurance", data: reins, color:"rgba(255,122,202,.85)" },
+      { name:"Total Cost", data: total, color:"rgba(231,236,255,.85)" }
+    ], {
+      title:"Monthly revenue vs. cost breakdown",
+      zeroLine:false,
+      breakevenMonth: breakevenMonth,
+      formatY: (v) => v >= 1000000 ? (v/1000000).toFixed(1) + "M" : v >= 1000 ? (v/1000).toFixed(0) + "k" : v.toFixed(0)
+    });
+
+    drawLineChart($("chartSurplusCash"), [
+      { name:"Surplus", data: surplus, color:"rgba(122,162,255,.95)" },
+      { name:"Cash", data: cash, color:"rgba(231,236,255,.85)" }
+    ], {
+      title:"Surplus can go negative; cash shows runway.",
+      zeroLine:true,
+      showNegativeZone: true,
+      breakevenMonth: breakevenMonth,
+      valleyMonth: valleyMonth,
+      formatY: (v) => v >= 1000000 ? (v/1000000).toFixed(1) + "M" : v >= 1000 ? (v/1000).toFixed(0) + "k" : v.toFixed(0)
+    });
+  }
+
+  // bind inputs
+  [
+    ["months","months",{min:6,max:120}],
+    ["startMembers","startMembers",{min:0}],
+    ["newPerMonth","newPerMonth",{min:0}],
+    ["churnPct","churnPct",{min:0,max:20}],
+    ["pmpm","pmpm",{min:0}],
+    ["rePmpm","rePmpm",{min:0}],
+    ["membersPerClinic","membersPerClinic",{min:100}],
+    ["rentPerClinic","rentPerClinic",{min:0}],
+    ["membersPerClinician","membersPerClinician",{min:100}],
+    ["maPerClinician","maPerClinician",{min:0}],
+    ["clinSalary","clinSalary",{min:0}],
+    ["maSalary","maSalary",{min:0}],
+    ["otherOpex","otherOpex",{min:0}],
+    ["overheadPct","overheadPct",{min:0,max:50}],
+    ["startupCost","startupCost",{min:0}],
+    ["startupMonth","startupMonth",{min:1,max:120}],
+    ["startingCash","startingCash",{}],
+  ].forEach(([id,key,limits]) => bindNumber(id, key, limits));
+
+  // presets
+  $("presetPilot").addEventListener("click", () => setState(presets.Pilot));
+  $("presetMetro").addEventListener("click", () => setState(presets.Metro));
+  $("presetBest").addEventListener("click", () => setState(presets.Best));
+  $("presetWorst").addEventListener("click", () => setState(presets.Worst));
+  $("resetDefaults").addEventListener("click", () => setState({
+    months:36,startMembers:500,newPerMonth:100,churnPct:1.0,pmpm:500,rePmpm:100,
+    membersPerClinic:2500,rentPerClinic:25000,membersPerClinician:1000,maPerClinician:2,
+    clinSalary:25000,maSalary:8000,otherOpex:15000,overheadPct:12,startupCost:2000000,startupMonth:1,startingCash:0
+  }));
+
+  // Share scenario
+  $("shareScenario").addEventListener("click", () => {
+    const params = new URLSearchParams();
+    Object.keys(state).forEach(k => params.set(k, state[k]));
+    const url = window.location.origin + window.location.pathname + '?' + params.toString();
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = $("shareScenario");
+      const orig = btn.textContent;
+      btn.textContent = "✓ Copied!";
+      setTimeout(() => btn.textContent = orig, 2000);
+    });
+  });
+
+  // Export PDF
+  $("exportPDF").addEventListener("click", () => {
+    window.print();
+  });
+
+  // Load from URL params
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('months')) {
+    const loaded = {};
+    Object.keys(state).forEach(k => {
+      if (urlParams.has(k)) loaded[k] = Number(urlParams.get(k));
+    });
+    setState(loaded);
+  }
+
+  // Toggle controls
+  let controlsVisible = false;
+  $("toggleControls").addEventListener("click", () => {
+    controlsVisible = !controlsVisible;
+    const controls = $("detailedControls");
+    const btn = $("toggleControls");
+    if (controlsVisible) {
+      controls.classList.remove("collapsed");
+      btn.textContent = "▲ Hide Detailed Controls";
+    } else {
+      controls.classList.add("collapsed");
+      btn.textContent = "▼ Show Detailed Controls";
+    }
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener("keydown", (e) => {
+    if (e.key === 'r' && !e.ctrlKey && !e.metaKey && e.target.tagName !== 'INPUT') {
+      e.preventDefault();
+      setState(presets.Pilot);
+    }
+    if (e.key === 'c' && !e.ctrlKey && !e.metaKey && e.target.tagName !== 'INPUT') {
+      e.preventDefault();
+      controlsVisible = !controlsVisible;
+      $("toggleControls").click();
+    }
+  });
+
+  render();
+</script>
+</body>
+</html>

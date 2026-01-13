@@ -5,6 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Charter Book</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -13,10 +14,44 @@
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    body { 
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      align-content: flex-start;
+      background:  #ccc;
+      align-items: center;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      width: 9in;
+        background: #fff;
+        padding: .5in 1in;
+      
+    }
+    ul ul li {
+      margin-left: 1em;
+      list-style-position: outside;
+    }
+    a { 
+      text-decoration: none;
+      color: #003399;
+    }
+    a:hover {
+      text-decoration: underline;
+        color: #0066cc;
+    }
+    h1 { 
+      margin: 0.5em 0;
+    }
+    h2, h3 {
+      margin: 0.5em 0;
+    }
   </style>
-  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <main>
 <header id="title-block-header">
 <h1 class="title">Charter Book</h1>
 </header>
@@ -2807,5 +2842,5 @@ long after you are gone.</p>
 succession, not charisma. They encode values in structures that persist.
 They obligate each generation to leave the system better than they found
 it. And they ask, always: Are we keeping faith?</em></p>
-</body>
+  </main></body>
 </html>

@@ -79,6 +79,27 @@
             font-size: 1.1rem;
         }
 
+        .principle-box {
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(52, 152, 219, 0.1));
+            border-left: 4px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--secondary-color);
+        }
+
+        .principle-box p {
+            margin: 0;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .principle-box strong {
+            font-weight: 600;
+            font-style: normal;
+        }
+
         .key-points {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -227,47 +248,78 @@
     <div class="container">
         <header>
             <h1 class="logo"><i class="fas fa-heart-pulse"></i> Keepwell Health Union</h1>
-            <p class="tagline">A nonprofit healthcare cooperative</p>
+            <p class="tagline">Healthcare optimized for health, not cost containment</p>
         </header>
 
         <div class="intro-card">
-            <h2>Healthcare That Works For People, Not Profit</h2>
+            <h2>Healthcare Redesigned From First Principles</h2>
             <p>
-                Keepwell Health Union is a nonprofit, clinician-led healthcare cooperative designed to provide 
-                high-quality, humane, and cost-predictable care by removing insurance from routine medical 
-                decision-making and confining it to catastrophic risk where it belongs.
+                The U.S. healthcare system is not failing because of bad medicine or bad people. It is failing because
+                of distorted incentives. Modern healthcare evolved to manage financial risk at scale, and over time that
+                purpose quietly displaced the human one.
             </p>
             <p>
-                We deliver primary care, mental health, urgent care, diagnostics, and care coordination directly 
-                to members through employer-based enrollment. The result is a healthcare system that is simpler, 
-                more transparent, more humane, and economically sustainable—without denying care or shifting 
-                risk onto patients.
+                Keepwell Health Union exists because better people are not enough. We need better systems. Systems where
+                the path of least resistance is aligned with your wellbeing. Systems optimized for health, not cost containment.
+            </p>
+            <p>
+                We are a federation of independent, nonprofit healthcare cooperatives bound by a shared charter. We deliver
+                primary care, mental health, urgent care, diagnostics, and care coordination directly to members—with no
+                billing, no prior authorization, no insurance friction for routine care. Catastrophic coverage stays where
+                it belongs: protecting against rare, expensive events, not controlling everyday medical decisions.
+            </p>
+            <p>
+                This is not incremental reform. This is structural redesign—built on fiduciary responsibility, long-term
+                stewardship, and an unshakable commitment to the people we serve.
+            </p>
+        </div>
+
+        <div class="principle-box">
+            <p>
+                <strong>Mother Keepwell</strong> is the spirit of this organization—not a person, founder, or mascot,
+                but a moral conscience that lives in every decision. She is everywhere and nowhere. She is that voice
+                asking: <em>Are we acting as a reasonable steward would? Are we keeping faith with the people who depend
+                on us?</em> She represents steady, patient, long-term care with no incentive to cut corners and no
+                tolerance for exploitation. Like asking "What would Gene do?" long after Gene Roddenberry passed, we ask:
+                <em>Would Mother Keepwell approve?</em> This question forces clarity and ensures we serve members, not ourselves.
             </p>
         </div>
 
         <div class="key-points">
             <div class="point-card">
-                <div class="icon"><i class="fas fa-hand-holding-heart"></i></div>
-                <h3>Patient-First Care</h3>
-                <p>Direct access to primary care, mental health, and urgent care without insurance friction or delays.</p>
+                <div class="icon"><i class="fas fa-shield-halved"></i></div>
+                <h3>Fiduciary Responsibility</h3>
+                <p>Acting in your best interest is not a marketing slogan—it's a binding rule. Our structure makes advocacy the path of least resistance, not a heroic exception.</p>
             </div>
 
             <div class="point-card">
-                <div class="icon"><i class="fas fa-shield-heart"></i></div>
-                <h3>Catastrophic Protection</h3>
-                <p>Reinsurance coverage for rare, high-cost events while keeping routine care simple and direct.</p>
+                <div class="icon"><i class="fas fa-seedling"></i></div>
+                <h3>Stewardship, Not Transaction</h3>
+                <p>Health is a long-term shared asset requiring continuity. You're a member whether you visit this month or not. The relationship persists.</p>
             </div>
 
             <div class="point-card">
-                <div class="icon"><i class="fas fa-dollar-sign"></i></div>
-                <h3>Predictable Costs</h3>
-                <p>Transparent pricing and stable costs for employers, saving $250-$550 per employee per month.</p>
+                <div class="icon"><i class="fas fa-lightbulb"></i></div>
+                <h3>Simplicity as Protection</h3>
+                <p>Complexity hides harm. We reject billing codes, copays, deductibles, and prior authorization for routine care. Simple systems protect members.</p>
             </div>
 
             <div class="point-card">
-                <div class="icon"><i class="fas fa-users"></i></div>
-                <h3>Cooperative Model</h3>
-                <p>No shareholders. Member-first governance. Surplus reinvested into better care and expanded access.</p>
+                <div class="icon"><i class="fas fa-arrows-spin"></i></div>
+                <h3>Closed-Loop Accountability</h3>
+                <p>Leadership compensation is tied to member outcomes. Poor performance triggers reinvestment in the system, not punishment. The system repairs itself.</p>
+            </div>
+
+            <div class="point-card">
+                <div class="icon"><i class="fas fa-network-wired"></i></div>
+                <h3>Federation, Not Consolidation</h3>
+                <p>Independent local unions bound by shared principles. Growth as responsibility, not expansion. Replication, not acquisition.</p>
+            </div>
+
+            <div class="point-card">
+                <div class="icon"><i class="fas fa-ban"></i></div>
+                <h3>No Extraction</h3>
+                <p>No shareholders. No private equity. No profit distribution. Surplus is reinvested into care quality and expanded access. Mother Keepwell is our standard.</p>
             </div>
         </div>
 
@@ -304,13 +356,15 @@
                     <span class="read-more">Read Concept <i class="fas fa-arrow-right"></i></span>
                 </a>
                 
-                <a href="charter.html" class="doc-card">
+                <a href="/charter/" class="doc-card">
                     <div class="doc-icon"><i class="fas fa-book"></i></div>
-                    <h3>Charter & Consititution</h3>
+                    <h3>Charter Book</h3>
                     <p>
-                        The proposed constitution and master charter for Keepwell defining our core beliefs, responsibilities, membership, governance and general rulebook for our organization.
+                        The philosophical and operational foundation of Keepwell. Explores why healthcare fails structurally,
+                        how to design systems that resist extraction, and what it means to act in the spirit of Mother Keepwell.
+                        This is our constitutional document and shared standard.
                     </p>
-                    <span class="read-more">Read Master Charter <i class="fas fa-arrow-right"></i></span>
+                    <span class="read-more">Read Charter Book <i class="fas fa-arrow-right"></i></span>
                 </a>
 
                 <a href="charter/bylaws.html" class="doc-card">
@@ -327,7 +381,8 @@
 
         <footer>
             <p><strong>Keepwell Health Union</strong></p>
-            <p>Healthcare designed for humans, governed by humans.</p>
+            <p>Systems that make the right path the easy path.</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">We do not have customers, consumers, or patients. We have members.</p>
         </footer>
     </div>
 </body>
